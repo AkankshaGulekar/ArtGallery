@@ -17,8 +17,12 @@ public class PaintingService {
 
     private final PaintingRepository paintingRepository;
 
-    public List<Painting> getAll() {
-        return paintingRepository.findAll();
+    public List<Painting> getAll(String search, String category) {
+        return paintingRepository.filter(blankToNull(search), blankToNull(category));
+    }
+
+    private String blankToNull(String value) {
+        return (value == null || value.isBlank()) ? null : value.trim();
     }
 
     public Painting getById(Long id) {
@@ -41,7 +45,8 @@ public class PaintingService {
         existing.setAvailable(updated.isAvailable());
         return paintingRepository.save(existing);
     }
-
+    
+    
     public void delete(Long id) {
         getById(id);
         paintingRepository.deleteById(id);
