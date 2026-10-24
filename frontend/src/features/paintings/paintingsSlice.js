@@ -15,9 +15,26 @@ export const fetchPaintings = createAsyncThunk(
   }
 )
 
+export const fetchPaintingById = createAsyncThunk(
+  'paintings/fetchOne',
+  async (id) => {
+    const response = await fetch(`${API_URL}/${id}`)
+    if (response.status === 404) throw new Error('Painting not found')
+    if (!response.ok) throw new Error('Failed to load painting')
+    return response.json()
+  }
+)
+
 const paintingsSlice = createSlice({
   name: 'paintings',
-  initialState: { items: [], status: 'idle', error: null },
+  initialState: {
+    items: [],
+    status: 'idle',
+    error: null,
+    selected: null,
+    selectedStatus: 'idle',
+    selectedError: null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -32,6 +49,19 @@ const paintingsSlice = createSlice({
       .addCase(fetchPaintings.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
+      })
+      .addCase(fetchPaintingById.pending, (state) => {
+        state.selectedStatus = 'loading'
+        state.selectedError = null
+        state.selected = null
+      })
+      .addCase(fetchPaintingById.fulfilled, (state, action) => {
+        state.selectedStatus = 'succeeded'
+        state.selected = action.payload
+      })
+      .addCase(fetchPaintingById.rejected, (state, action) => {
+        state.selectedStatus = 'failed'
+        state.selectedError = action.error.message
       })
   },
 })

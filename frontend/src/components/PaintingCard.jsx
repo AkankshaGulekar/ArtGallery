@@ -1,8 +1,10 @@
+import { Link } from 'react-router-dom'
+
 export default function PaintingCard({ painting }) {
-  const { title, price, category, imageUrl, available } = painting
+  const { id, title, price, category, imageUrl, available } = painting
 
   return (
-    <div className="painting-card">
+    <Link to={`/paintings/${id}`} className="painting-card">
       {imageUrl ? (
         <img src={imageUrl} alt={title} />
       ) : (
@@ -17,6 +19,6 @@ export default function PaintingCard({ painting }) {
         })}
       </p>
       {!available && <p>Sold</p>}
-    </div>
+    </Link>
   )
 }
