@@ -28,6 +28,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.GET, "/api/paintings/**").permitAll()
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/error").permitAll()
                     .requestMatchers("/api/paintings/**").hasRole("ADMIN")
                     .anyRequest().authenticated());
 
