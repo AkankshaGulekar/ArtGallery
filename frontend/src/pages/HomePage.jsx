@@ -17,7 +17,7 @@ export default function HomePage() {
   return (
     <div>
       <section className="hero">
-        <h1>XYZXYZXYZXYZXYZXYZXYZXYZ</h1>
+        <h1>Colour After Colour by Shifa Shaikh</h1>
         <Link to="/shop" className="button">
           Shop new arrivals
         </Link>
