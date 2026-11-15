@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import paintingsReducer from '../features/paintings/paintingsSlice'
 import authReducer from '../features/auth/authSlice'
 import cartReducer from '../features/cart/cartSlice'
+import ordersReducer from '../features/orders/ordersSlice'
 
 export const store = configureStore({
   reducer: {
     paintings: paintingsReducer,
     auth: authReducer,
     cart: cartReducer,
+    orders: ordersReducer,
   },
 })
 
@@ -18,7 +20,7 @@ store.subscribe(() => {
   if (token === lastToken) return
   lastToken = token
 
-    try {
+  try {
     if (token) {
       localStorage.setItem('auth', JSON.stringify({ user, token }))
     } else {

@@ -328,3 +328,10 @@ a.tile p {
   opacity: 0.4;
   cursor: default;
 }
+
+.auth-page textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+}

@@ -85,6 +85,11 @@ export default function CartPage() {
       {items.length > 0 && (
         <div className="cart-total">
           <strong>Total: {rupees(total)}</strong>
+          <p>
+            <Link to="/checkout" className="button">
+              Proceed to checkout
+            </Link>
+          </p>
         </div>
       )}
     </div>
