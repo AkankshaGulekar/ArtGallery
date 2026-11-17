@@ -7,13 +7,19 @@ import java.util.List;
 import com.paintingstore.entity.Order;
 import com.paintingstore.entity.OrderItem;
 import com.paintingstore.entity.OrderStatus;
+import com.paintingstore.payment.PaymentType;
 
 public record OrderResponse(
         Long id,
         BigDecimal total,
         OrderStatus status,
-        String shippingAddress,
+        String addressLine,
+        String city,
+        String state,
+        String pincode,
         String phone,
+        PaymentType paymentType,
+        String paymentReference,
         LocalDateTime createdAt,
         List<Item> items) {
 
@@ -33,8 +39,13 @@ public record OrderResponse(
                 order.getId(),
                 order.getTotal(),
                 order.getStatus(),
-                order.getShippingAddress(),
+                order.getAddressLine(),
+                order.getCity(),
+                order.getState(),
+                order.getPincode(),
                 order.getPhone(),
+                order.getPaymentType(),
+                order.getPaymentReference(),
                 order.getCreatedAt(),
                 order.getItems().stream().map(Item::from).toList());
     }

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import cartIcon from '../assets/cart-icon.png'
+import ordersIcon from '../assets/orders-icon.png'
 import { logout } from '../features/auth/authSlice'
 import { fetchCart } from '../features/cart/cartSlice'
 
@@ -30,10 +31,14 @@ export default function Navbar() {
       <div className="nav-links">
         {user ? (
           <>
-            <Link to="/cart" className="cart-link">
+          <Link to="/cart" className="cart-link" title="Cart">
               <img src={cartIcon} alt="Cart" className="cart-icon" />
               <span>({count})</span>
             </Link>
+            <Link to="/orders" className="cart-link" title="My orders">
+              <img src={ordersIcon} alt="My orders" className="cart-icon" />
+            </Link>
+            
             <span>Hi, {user.name}</span>
             <button onClick={handleLogout}>Log out</button>
           </>

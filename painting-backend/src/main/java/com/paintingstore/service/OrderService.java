@@ -43,7 +43,10 @@ public class OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setShippingAddress(request.shippingAddress());
+        order.setAddressLine(request.addressLine());
+        order.setCity(request.city());
+        order.setState(request.state());
+        order.setPincode(request.pincode());
         order.setPhone(request.phone());
 
         for (CartItem cartItem : cartItems) {

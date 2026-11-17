@@ -335,3 +335,30 @@ a.tile p {
   border-radius: 6px;
   font: inherit;
 }
+
+
+.order-card {
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.order-head {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.order-status {
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.order-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
