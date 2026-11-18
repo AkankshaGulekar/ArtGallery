@@ -46,11 +46,14 @@ public class Order extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String city;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String state;
 
-    @Column(nullable = false, length = 6)
-    private String pincode;
+    @Column(nullable = false, length = 12)
+    private String postalCode;
+
+    @Column(nullable = false, length = 100)
+    private String country;
 
     @Column(nullable = false)
     private String phone;

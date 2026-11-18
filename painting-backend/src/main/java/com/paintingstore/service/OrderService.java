@@ -46,7 +46,8 @@ public class OrderService {
         order.setAddressLine(request.addressLine());
         order.setCity(request.city());
         order.setState(request.state());
-        order.setPincode(request.pincode());
+        order.setPostalCode(request.postalCode());
+        order.setCountry(request.country());
         order.setPhone(request.phone());
 
         for (CartItem cartItem : cartItems) {
