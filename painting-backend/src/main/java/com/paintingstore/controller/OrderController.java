@@ -29,7 +29,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse placeOrder(@Valid @RequestBody PlaceOrderRequest request,
                                     Authentication authentication) {
-        return orderService.placeOrder(authentication.getName(), request);
+        return orderService.createOrder(authentication.getName(), request);
     }
 
     @GetMapping

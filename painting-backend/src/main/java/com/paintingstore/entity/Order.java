@@ -38,7 +38,7 @@ public class Order extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus status = OrderStatus.PLACED;
+    private OrderStatus status = OrderStatus.PENDING_PAYMENT;
 
     @Column(nullable = false, length = 300)
     private String addressLine;

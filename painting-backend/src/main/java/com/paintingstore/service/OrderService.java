@@ -12,8 +12,10 @@ import com.paintingstore.dto.PlaceOrderRequest;
 import com.paintingstore.entity.CartItem;
 import com.paintingstore.entity.Order;
 import com.paintingstore.entity.OrderItem;
+import com.paintingstore.entity.OrderStatus;
 import com.paintingstore.entity.Painting;
 import com.paintingstore.entity.User;
+import com.paintingstore.payment.PaymentType;
 import com.paintingstore.repository.CartItemRepository;
 import com.paintingstore.repository.OrderRepository;
 import com.paintingstore.repository.PaintingRepository;
@@ -33,7 +35,7 @@ public class OrderService {
     private final UserRepository userRepository;
 
     @Transactional
-    public OrderResponse placeOrder(String email, PlaceOrderRequest request) {
+    public OrderResponse createOrder(String email, PlaceOrderRequest request) {
         User user = findUser(email);
         List<CartItem> cartItems = cartItemRepository.findByUserId(user.getId());
 
@@ -51,11 +53,7 @@ public class OrderService {
         order.setPhone(request.phone());
 
         for (CartItem cartItem : cartItems) {
-            Painting painting = paintingRepository
-                    .findByIdForUpdate(cartItem.getPainting().getId())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Painting not found"));
-
+            Painting painting = cartItem.getPainting();
             if (!painting.isAvailable()) {
                 throw new ResponseStatusException(
                         HttpStatus.CONFLICT, painting.getTitle() + " is sold");
@@ -66,21 +64,53 @@ public class OrderService {
             item.setQuantity(cartItem.getQuantity());
             item.setPrice(painting.getPrice());
             order.addItem(item);
+        }
 
+        orderRepository.save(order);
+        return OrderResponse.from(order);
+    }
+
+    @Transactional
+    public OrderResponse confirmPayment(String email, Long orderId,
+                                        PaymentType type, String reference) {
+        User user = findUser(email);
+        Order order = orderRepository.findById(orderId)
+                .filter(o -> o.getUser().getId().equals(user.getId()))
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Order not found"));
+
+        if (order.getStatus() != OrderStatus.PENDING_PAYMENT) {
+            return OrderResponse.from(order);
+        }
+
+        for (OrderItem item : order.getItems()) {
+            Painting painting = paintingRepository
+                    .findByIdForUpdate(item.getPainting().getId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Painting not found"));
+
+            if (!painting.isAvailable()) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, painting.getTitle() + " is sold");
+            }
             if (ORIGINALS.equals(painting.getCategory())) {
                 painting.setAvailable(false);
             }
         }
 
-        orderRepository.save(order);
-        cartItemRepository.deleteAll(cartItems);
+        order.setStatus(OrderStatus.PLACED);
+        order.setPaymentType(type);
+        order.setPaymentReference(reference);
+        cartItemRepository.deleteAll(cartItemRepository.findByUserId(user.getId()));
         return OrderResponse.from(order);
     }
 
     @Transactional(readOnly = true)
     public List<OrderResponse> getOrders(String email) {
         User user = findUser(email);
-        return orderRepository.findByUserIdOrderByCreatedAtDesc(user.getId()).stream()
+        return orderRepository
+                .findByUserIdAndStatusNotOrderByCreatedAtDesc(user.getId(), OrderStatus.PENDING_PAYMENT)
+                .stream()
                 .map(OrderResponse::from)
                 .toList();
     }
