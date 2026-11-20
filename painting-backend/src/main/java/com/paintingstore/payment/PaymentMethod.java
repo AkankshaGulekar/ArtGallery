@@ -1,10 +1,14 @@
 package com.paintingstore.payment;
 
-import java.math.BigDecimal;
+import java.util.Map;
+
+import com.paintingstore.entity.Order;
 
 public interface PaymentMethod {
 
     PaymentType type();
 
-    PaymentResult pay(BigDecimal amount, String detail);
+    PaymentSession start(Order order);
+
+    String confirm(Order order, Map<String, String> data);
 }

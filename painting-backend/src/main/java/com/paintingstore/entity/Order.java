@@ -63,6 +63,8 @@ public class Order extends BaseEntity {
 
     private String paymentReference;
 
+    private String providerOrderId;
+
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
